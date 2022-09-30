@@ -12,21 +12,30 @@ class GameScene: SKScene {
     
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
-    
+    var scoreLabel: SKLabelNode!
+    var score = 0 {
+        didSet {
+            scoreLabel.text = "Score: \(score)"
+        }
+    }
     private var lastUpdateTime : TimeInterval = 0
-    private var label : SKLabelNode?
+    //private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     
     override func sceneDidLoad() {
-
+        scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
+        scoreLabel.text = "Score: 0"
+        scoreLabel.horizontalAlignmentMode = .right
+        scoreLabel.position = CGPoint(x: 980, y: 700)
+        addChild(scoreLabel)
         self.lastUpdateTime = 0
         
         // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
+        self.scoreLabel = self.childNode(withName: "//helloLabel") as? SKLabelNode
+        //if let scoreLabel = self.label {
+        scoreLabel.alpha = 0.0
+        scoreLabel.run(SKAction.fadeIn(withDuration: 2.0))
+        //}
         
         // Create shape node to use during mouse interaction
         let w = (self.size.width + self.size.height) * 0.05
@@ -48,6 +57,7 @@ class GameScene: SKScene {
             n.position = pos
             n.strokeColor = SKColor.green
             self.addChild(n)
+            score += 1
         }
     }
     
@@ -56,6 +66,7 @@ class GameScene: SKScene {
             n.position = pos
             n.strokeColor = SKColor.blue
             self.addChild(n)
+            
         }
     }
     
@@ -64,13 +75,14 @@ class GameScene: SKScene {
             n.position = pos
             n.strokeColor = SKColor.red
             self.addChild(n)
+            
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-        }
+        //if let score = self.label {
+          //  label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+       // }
         
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
